@@ -25,6 +25,57 @@ using SymPy
 plotly()
 ```
 
+平均が $\vec{\mu}=[\mu_1, \mu_2, \mu_3]^\top$ である 3 次元のガウス分布をパラメトライズすることを考える. ただし $\vec{\mu}\in\mathbb{R}^3$ 全体ではなく $\vec{\mu}$ を
+
+$$
+A = 
+\begin{bmatrix}
+\mu_1 & \mu_2/\sqrt{2} \\
+\mu_2/\sqrt{2} & \mu_3
+\end{bmatrix}
+$$
+
+と $2\times 2$ 行列のかたちにした際, この $A$ がランク1以下の行列となることを条件として要請する. $\mu_2/\sqrt{2}$ としてるのは別の $\vec{\nu}$ (ギリシャ文字のニュー) として
+
+$$
+B = 
+\begin{bmatrix}
+\nu_1 & \nu_2/\sqrt{2} \\
+\nu_2/\sqrt{2} & \nu_3
+\end{bmatrix}
+$$
+
+と表示した際に $\mathop{\textrm{tr}}(A^\top B) = \sum_{i=1}^3 \mu_i\nu_i$ とさせたいからである.
+
+```julia
+@vars μ_1 μ_2 μ_3
+@vars ν_1 ν_2 ν_3
+
+A = [
+    μ_1    μ_2/√2
+    μ_2/√2 μ_3
+]
+
+B = [
+    ν_1    ν_2/√2
+    ν_2/√2 ν_3
+]
+
+tr(A*B)
+```
+
+この時 $X = [X_1, X_2, X_3]^\top \sim \mathcal{N}(\vec{\mu}, I_3)$ となる確率変数に対応する密度関数は
+
+$$
+f(X|\vec{\mu}) = \frac{1}{(2\pi)^{3/2}} \exp\left(-\frac{1}{2}\mathop{\textrm{tr}}((X-\vec{\mu})^T(X-\vec{\mu}))\right)
+$$
+
+となる.
+
+
+# ランク 1 以下の行列をパラメトライズする.
+
+
 行列 $A$ をランク (階数) が 1 以下の実対称 $2\times 2$ 行列とする. このとき適当な直交行列 $P$ と $\lambda\in\mathbb{R}$を用いて
 
 $$
