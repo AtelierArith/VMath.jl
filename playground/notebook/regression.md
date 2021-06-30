@@ -15,8 +15,8 @@ jupyter:
 # 回帰問題
 
 ```julia
-using Statistics
-
+using Distributions
+using LazySets
 using Plots
 ```
 
@@ -94,13 +94,13 @@ $$
 I_k  = \left\{i\in \{1,\dots, n\}; X_i = k\right\}.
 $$
 
-このとき最尤推定法によって
+このとき最尤推定法によって　$\theta_k$ の推定量として
 
 $$
 \theta_k = \bar{Y}_k \underset{\textrm{def}}{=} \frac{1}{|I_k|} \sum_{i\in I_k} Y_i
 $$
 
-と推定することができる. これは $X_i = d_{i_k}$, $Y_i = \theta_{i_k}  + Z$ だった時の尤度 $L$ が
+を得ることができる. これは $X_i = d_{i_k}$, $Y_i = \theta_{i_k}  + Z$ だった時の尤度 $L$ が
 
 $$
 \begin{aligned}
@@ -145,6 +145,125 @@ $$
 $$
 
 という単調非減少列の関係を満たすとする.
+
+$K=2$ (すなわちパラメータの個数が 2 のとき)　は $\theta_1, \theta_2$ は次の青色の範囲を動く:
+
+```julia
+function create_domain()
+    hs1 = HalfSpace([1., -1.], 0.)
+    hs2 = HalfSpace([-1., 0.], 0.)
+    hs3 = HalfSpace([0., -1.], 0.)
+    hs4 = HalfSpace([0., 1.], 2.)
+    #= for debugging
+    p = plot(aspect_ratio=:equal, xlim=[-1, 1])
+    plot!(p, hs1, color=:red)
+    plot!(p, hs2, color=:blue)
+    plot!(p, hs3, color=:green)
+    =#
+    domain = plot(
+        xlim=[-1., 1.],　ylim=[-1., 1.],　
+        aspect_ratio=:equal, xlabel="\$\\theta_1\$",  
+        ylabel="\$\\theta_2\$"
+    )
+    ph = HPolyhedron([hs1, hs2, hs3, hs4])
+    P_as_polytope = convert(HPolytope, ph);
+    plot!(domain, P_as_polytope, color=:blue)
+    domain
+end
+```
+
+注意: 理論上は青色のゾーンは $\theta_2$ 方向に向かって無限に伸びているが領域の可視化における技術的な制限によって有界領域でしか描画ができない. `hs4` で　$\theta_2$ の上限を（とりあえず２）で抑えている.
+
+
+# 青色ゾーンでの制約条件を課す確率モデル
+
+確率モデルのパラメータに
+
+$$
+\theta_1\leq \theta_2 \leq \dots \leq \theta_K
+$$
+
+という制約と任意の $k$ に対して $|I_k| = r$ となる $r>0$ が存在するとする.　サイズ　$n$ のサンプル $(X_i, Y_i)$　が与えられているとしてそれから最尤推定でパラメータを推定する. いろんな計算をして
+
+$$
+\underset{\theta_1 \leq \theta_2 \leq \dots \leq \theta_K}{\textrm{min}} r \sum_{k=1}^K (\bar{Y}_k  - \theta_k)^2
+$$
+
+を満足する $\theta = (\theta_1,\dots, \theta_K)$ が求めたい値になることがわかる.
+
+
+確率モデルは次のように単純化できる
+
+```julia
+𝛉 = (0.5, 1.0)
+r = 300
+sample1 = [(X=𝛉[1], Y=𝛉[1] + randn()) for _ in 1:r]
+sample2 = [(X=𝛉[2], Y=𝛉[2] + randn()) for _ in 1:r];
+```
+
+```julia
+Y_1 = mean(getproperty.(sample1, :Y))
+Y_2 = mean(getproperty.(sample2, :Y))
+domain = create_domain()
+scatter!(domain, 𝛉, label="\$\\theta\$")
+scatter!(domain, (Y_1, Y_2), label="\$\\bar{Y}\$")
+```
+
+- 真の分布 $\theta$ がこの領域の頂点 $(0, 0)$ にあるとする. (領域の境界)
+
+```julia
+𝛉 = (0., 0.)
+r = 10
+sample1 = [(X=𝛉[1], Y=𝛉[1] + randn()) for _ in 1:r]
+sample2 = [(X=𝛉[2], Y=𝛉[2] + randn()) for _ in 1:r]
+
+Y_1 = mean(getproperty.(sample1, :Y))
+Y_2 = mean(getproperty.(sample2, :Y))
+domain = create_domain()
+scatter!(domain, 𝛉, label="\$\\theta\$")
+scatter!(domain, (Y_1, Y_2), label="\$\\bar{Y}\$")
+```
+
+```julia
+using Optim
+```
+
+```julia
+f(θ₁, θ₂) = (θ₁ - Y_1)^2 + (θ₂ - Y_2)^2
+f(θ) = f(θ...)
+
+𝛉 = (0., 0.)
+r = 10
+sample1 = [(X=𝛉[1], Y=𝛉[1] + randn()) for _ in 1:r]
+sample2 = [(X=𝛉[2], Y=𝛉[2] + randn()) for _ in 1:r]
+
+Y_1 = mean(getproperty.(sample1, :Y))
+Y_2 = mean(getproperty.(sample2, :Y))
+domain = create_domain()
+scatter!(domain, 𝛉, label="\$\\theta\$")
+scatter!(domain, (Y_1, Y_2), label="\$\\bar{Y}\$")
+
+lower = [0., 0.]
+upper = [2., 2.]
+initial_x = [1., 2.]
+inner_optimizer = GradientDescent()
+result = optimize(f, lower, upper, initial_x, Fminbox(inner_optimizer))
+optX, optY = result.minimizer
+scatter!(domain, (optX, optY), label="miniizer")
+```
+
+領域の境界に原点から伸びる軸を張って斜交座標 $(\eta_1, \eta_2)$ を用いて領域をパラメトライズし直す.
+このとき領域は $(\theta_1, \theta_2) = (\eta_1, \eta_1 + \eta_2)$ $\eta_1\geq 0, \eta_2 \geq 0$　として得られる.
+
+```julia
+domain = create_domain()
+
+η₁ = rand(100)
+η₂ = rand(100)
+θ₁ = η₁
+θ₂ = η₁ .+ η₂
+scatter!((θ₁, θ₂), legend=false)
+```
 
 ```julia
 
