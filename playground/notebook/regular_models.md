@@ -411,14 +411,52 @@ $$
 
 ### Prop: Cramér–Rao の不等式
 
-確率モデルが上記の C1, C2, C3 の条件を満足し, $\hat{\theta}$ が不偏推定量とする.
+- 確率モデルが上記の C1, C2, C3 の条件を満足し, $\hat{\theta}$ が不偏推定量とする. 分散 $V(\hat{\theta})$ が存在して
+$$
+\frac{d}{d\theta} \int \hat{\theta}(x^n) f_n(x|\theta)dx = 
+\int \frac{d}{d\theta}  \hat{\theta}(x^n) f_n(x|\theta)dx
+$$
+
+ならば
+
+$$
+V(\hat{\theta}) \geq \frac{1}{I_n(\theta)}
+$$
+
+を得る. これが Cramér–Rao の不等式である.
+
+
+### 証明:
+
+積分に関するシュワルツの不等式を利用する:
+
+$$
+\begin{aligned}
+E[(\hat{\theta}(X^n) - \theta)S_n(\theta, X^n)]^2 &\leq E[(\hat{\theta}(X^n) - \theta)^2] E[S_n(\theta, X^n)^2] \\
+&= E[(\hat{\theta}(X^n)-E[\hat{\theta}])]E[S_n(\theta, X^n)^2] \\
+&= V(\hat{\theta}) I_n(\theta)
+\end{aligned}
+$$
+
+ここで左辺は
+$$
+\begin{aligned}
+E[(\hat{\theta}(X^n) - \theta)S_n(\theta, X^n)]
+&=
+E[(\hat{\theta}(X^n)S_n(\theta, X^n)] - \theta E[S_n(\theta, X^n)] \\
+&= \int \hat{\theta}(x^n) \frac{d}{d\theta} f_n(x|\theta) dx - \theta E[\sum_i \frac{d}{d\theta}\log f(X_i|\theta)] \\
+&= \frac{d}{d\theta}E[\hat{\theta}] - 0 = \frac{d}{d\theta} \theta = 1
+\end{aligned}
+$$
+
+よって示したい不等式が得られる. ($I_n = n I_1$ であること, 0 より真に大きいことに注意する.)
+
+
+# Example
 
 ```julia
 
 ```
-
-# テキストの設定
-
 
 # Reference
 
