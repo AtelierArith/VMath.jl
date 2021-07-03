@@ -298,8 +298,18 @@ $$
 $\hat{\theta}$ の分散は次のようにしてわかる:
 
 $$
-Var
+V(\hat{\theta})=E[(\hat{\theta} - E[\hat{\theta}])^2] = E[\sum_{i=1}^n c_i(X_i - \mu)^2] = \sigma^2\sum_{i=1}^n c_i^2
 $$
+
+ここで $\sigma^2$ は一つのサンプルの分散を表す. つまり $\sum_{i=1}^n c_i = 1$ の条件のもと二乗和 $\sum_{i=1}^n c_i^2$ の極値問題を求めれば良い. それは
+
+次のようなラグランジュ関数を偏微分しその零点を与えるようにすれば良い.
+
+$$
+L(c_1,\dots,c_n) = \sum_{i=1}^n c_i^2 - \lambda(\sum_{i=1}^n c_i - 1)
+$$
+
+そうすると $i$ によらず $c_i = \lambda/2$ となる. ということで拘束条件から $c_i = 1/n$ となる. 実は最初に計算したものが BLUE (best linear unbiased estimator) になっていることがわかる.
 
 
 # テキストの設定
