@@ -351,6 +351,68 @@ $$
 
 - パラメータが複数ある場合は $\partial_i\log f(X_1|\theta)\partial_j\log f(X_1|\theta)$ を $(i, j)$ 成分にもつ行列として $I(\theta)$ を定義する. これは Fisher 情報量行列と呼ばれる. $\partial_i$ は $i$ 番目の成分で偏微分する意味である.
 
+
+## 確率モデルに要請するいくつかの仮定
+
+#### Prop:
+
+確率モデル $f(x|\theta)$ が次を満たしているとする:
+
+- C1: f のサポート集合 $\{x|f(x|\theta)\neq 0\}$ が $\theta$ に依存しない.
+  - `f=0` の場所は `log` によって定義できなくなるのと微分によって $\theta$ の値を色々変える処理があるから Fisher 情報量を定義できるようにするための条件？
+- C2: 
+  下記のように微分積分順序が可能:
+  $$
+  \frac{d}{d\theta}\int f(x|\theta) dx = \int \frac{d}{d\theta} f(x|\theta) dx (= 0)
+  $$
+  $$
+  \frac{d^2}{d\theta^2}\int f(x|\theta) dx = \int \frac{d^2}{d\theta^2} f(x|\theta) dx (= 0)
+  $$
+- C3:
+  - $0 < I_1(\theta) <\infty$ すなわち, サンプルが１のFisher情報量が定義されており可逆.
+  
+この時次が成り立つ:
+
+- $E[S_1(\theta, X_1)] = 0$,
+- $I_n(\theta) = n I_1(\theta)$,
+- $I_1(\theta) = -E\left[\frac{d^2}{d\theta^2}\log f(X_i|\theta)\right]$.
+
+#### Proof:
+
+実際, $\dot{f}$ を $\theta$ に関する微分とすると 
+$$
+E[S_1(\theta, X_1)] = E[\frac{d}{d\theta}\log f] = \int \frac{\dot{f}}{f} f dx = \int \dot{f} dx = \frac{d}{d\theta}\int f dx = \frac{d}{d\theta} 1 = 0
+$$
+
+$$
+\begin{aligned}
+I_n(\theta) 
+&= E[(S_n(\theta, X^n)^2] \\
+&= E[(\frac{d}{d\theta}\sum_{i=1}^n \log f(X_i | \theta))^2] \\
+&= E[\sum_{i=1}^n (\frac{d}{d\theta} \log f(X_i | \theta))^2] + 2 \sum_{i<j} E[\frac{d}{d\theta}\log f(X_i|\theta)]E[\frac{d}{d\theta}\log f(X_j|\theta)] \\
+&=E[\sum_{i=1}^n (\frac{d}{d\theta} \log f(X_i | \theta))^2] + 0 \\
+&=\sum_i E[S_1^2(\theta, X_i)] = nI_n(\theta)
+\end{aligned}
+$$
+
+最後に
+
+$$
+\frac{d^2}{d\theta^2} \log f = \ddot{f}/f - (\dot{f}/f)^2
+$$
+
+に注意して
+$$
+E[\frac{d^2}{d\theta^2}\log f(X_i|\theta)] = \int \ddot{f} dx - E[S_1^2] = -E[S_1^2]
+$$
+
+から従う.
+
+
+### Prop: Cramér–Rao の不等式
+
+確率モデルが上記の C1, C2, C3 の条件を満足し, $\hat{\theta}$ が不偏推定量とする.
+
 ```julia
 
 ```
