@@ -240,7 +240,7 @@ $$
 $$
 \sqrt{n}(\theta_n - \theta_0) \sim \mathcal{N}(0, 1)
 $$
-となる. わかっている人は右辺は $\mathcal{N}(0, 1)$ の代わりに $\mathcal{N}(0, 1/1)$ と書きたくなる. これは分散項が後述する Fisher 情報量の逆数になるからである. この確率モデルだと Fisher 情報量が 1 になる.
+となる. わかっている人は右辺は $\mathcal{N}(0, 1)$ の代わりに $\mathcal{N}(0, 1/1)$ と書きたくなる. これは分散項が後述する サンプルが1 の Fisher 情報量 $I_1$ の逆数になるからである. この確率モデルだと Fisher 情報量が 1 になる.
 
 
 # 漸近理論
@@ -253,7 +253,7 @@ $$
 $$
 \sqrt{n}(\hat{\theta}_n - \theta_0) \to_d \mathcal{N}(0, I^{-1}(\theta_0))
 $$
-のように法則収束することが知られている. ここで $\theta_0$ は 1 次元に限らない. $I$ は後述する Fisher 情報行列である.
+のように法則収束することが知られている. ここで $\theta_0$ は 1 次元に限らない. $I$ は後述する Fisher 情報量行列である.
 
 
 # 推定量の話
@@ -311,6 +311,49 @@ $$
 
 そうすると $i$ によらず $c_i = \lambda/2$ となる. ということで拘束条件から $c_i = 1/n$ となる. 実は最初に計算したものが BLUE (best linear unbiased estimator) になっていることがわかる.
 
+
+## 二乗誤差
+
+良い推定量として $E[(\hat{\theta} - \theta_0)^2]$ を最小化するという方針も取れる. ただし unbiased estimator であればこれは実質 $V[\hat{\theta}]$ である. 実際下記のように分解し, クロスタームの期待値がゼロになることを利用すると
+
+$$
+\begin{aligned}
+E[(\hat{\theta} - \theta_0)^2] 
+&= E[(\hat{\theta} - E[\hat{\theta}] + E[\hat{\theta}] - \theta_0)^2] \\
+&= E[(\hat{\theta} - E[\hat{\theta}])^2] + E[(E[\hat{\theta}] - \theta_0)^2] + 2E[(\hat{\theta} - E[\hat{\theta}])(E[\hat{\theta}] - \theta_0)]\\
+&= E[(\hat{\theta} - E[\hat{\theta}])^2] + (E[\hat{\theta}] - \theta_0)^2 \\
+&= V(\hat{\theta}) + (\textrm{Bias}(\hat{\theta}))^2
+\end{aligned}
+$$
+
+となるからである.
+
+
+# Fisher 情報量と Cramér–Rao の不等式
+
+- ここでは(議論の簡単のため)パラメータの次元が１である場合に注目する.
+- 上記の議論で, 不偏推定量の中で良いものの比較は分散の大小で決めると良さそうであることがわかった. 実は推定量の分散は Cramér–Rao の不等式によってフィッシャー情報量の逆数(= Cramér–Rao の下限)で下から抑えられることがわかっている. Fisher 情報量の定義をする.
+- i.i.d なサンプルを用意してそれを $X^n$ とおく. $f(x|\theta)$ を確率モデルとし, $S_n$ を対数尤度の微分とする:
+
+$$
+\begin{aligned}
+f_n(X^n|\theta) &\underset{\textrm{def}}{=} \prod_{i=1}^n f(X_i|\theta) \\
+S_n(\theta, X^n) &\underset{\textrm{def}}{=} \frac{d}{d\theta} \log f_n(X^n|\theta)
+\end{aligned}
+$$
+
+Fisher 情報量 $I_n(\theta)$ を次のように定義する:
+
+$$
+I_n(\theta) = E[(S_n(\theta, X^n)^2] = \int S_n(\theta, x^n)f(x|\theta) dx
+$$
+
+
+- パラメータが複数ある場合は $\partial_i\log f(X_1|\theta)\partial_j\log f(X_1|\theta)$ を $(i, j)$ 成分にもつ行列として $I(\theta)$ を定義する. これは Fisher 情報量行列と呼ばれる. $\partial_i$ は $i$ 番目の成分で偏微分する意味である.
+
+```julia
+
+```
 
 # テキストの設定
 
