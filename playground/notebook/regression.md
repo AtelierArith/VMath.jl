@@ -188,12 +188,15 @@ $$
 という制約と任意の $k$ に対して $|I_k| = r$ となる $r>0$ が存在するとする.　サイズ　$n$ のサンプル $(X_i, Y_i)$　が与えられているとしてそれから最尤推定でパラメータを推定する. いろんな計算をして
 
 $$
-\underset{\theta_1 \leq \theta_2 \leq \dots \leq \theta_K}{\textrm{min}} r \sum_{k=1}^K (Y_k  - \theta_k)^2
-= \underset{\theta_1 \leq \theta_2 \leq \dots \leq \theta_K}{\textrm{min}} r \sum_{k=1}^K (\bar{Y}_k  - \theta_k)^2
+\underset{\theta_1 \leq \theta_2 \leq \dots \leq \theta_K}{\min} \sum_{k=1}^K \sum_{i\in I_k}(Y_i - \theta_k)^2
+= \underset{\theta_1 \leq \theta_2 \leq \dots \leq \theta_K}{\min} r \sum_{k=1}^K (\bar{Y}_k  - \theta_k)^2
 $$
 
 を満足する $\theta = (\theta_1,\dots, \theta_K)$ が求めたい値になることがわかる.
 
+```julia
+
+```
 
 確率モデルは次のように単純化できる
 
