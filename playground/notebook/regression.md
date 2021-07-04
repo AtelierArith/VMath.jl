@@ -192,11 +192,21 @@ $$
 = \underset{\theta_1 \leq \theta_2 \leq \dots \leq \theta_K}{\min} r \sum_{k=1}^K (\bar{Y}_k  - \theta_k)^2
 $$
 
-を満足する $\theta = (\theta_1,\dots, \theta_K)$ が求めたい値になることがわかる.
+を満足する $\theta = (\theta_1,\dots, \theta_K)$ が求めたい値になることがわかる. 実際，　$\min$ の中にある式は次のように変形できる.
 
-```julia
 
-```
+$$
+\begin{aligned}
+\sum_{k=1}^K\sum_{i\in I_k}(Y_i - \theta_k)^2
+&= \sum_{k=1}^K\sum_{i\in I_k}(Y_i^2 - 2Y_i\theta_k + \theta_k^2) \\
+&= \sum_{k=1}^K\sum_{i\in I_k}Y_i^2 -2\sum_{k=1}^K\theta_k\left(\sum_{i\in I_k} Y_i\right) + \sum_{k=1}^K\sum_{i\in I_k} \theta_k^2 \\
+&= \sum_{k=1}^K\sum_{i\in I_k}Y_i^2 -2\sum_{k=1}^K\theta_k r \bar{Y}_k + \sum_{k=1}^K r \theta_k^2 \\
+&= \left(\sum_{k=1}^K\sum_{i\in I_k}Y_i^2 - \sum_{k=1}^K r \bar{Y}_k^2 \right)+ 
+\left(\sum_{k=1}^K r \bar{Y}_k^2 -2\sum_{k=1}^K\theta_k r \bar{Y}_k + \sum_{k=1}^K r \theta_k^2 \right) \\
+&= (\textrm{const. w.r.t}\ \theta) + r\sum_{k=1}^K(\bar{Y}_k - \theta_k)^2
+\end{aligned}
+$$
+
 
 確率モデルは次のように単純化できる
 
