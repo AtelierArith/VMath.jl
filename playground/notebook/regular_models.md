@@ -5,7 +5,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.11.2
+      jupytext_version: 1.11.3
   kernelspec:
     display_name: Julia 1.6.1
     language: julia
@@ -485,6 +485,68 @@ $$
 $$
 
 が $\hat{\mu}$ であるときは $V(\bar{X}) = \frac{1}{n}$ である. つまり $\bar{X}$ は Cramér–Raoの下限を実現できている良い．不偏推定量になっている.
+
+
+# 特定の条件下での最尤推定量の一致性
+
+- パラメータの次元が 1 の場合についてのべる
+- サンプルサイズが $n$ のサンプル $X^n$ から得られたパラメータ $\theta$ についての推定量　$\hat\theta_n$  が得られたとする. この時　$n\to\infty$ の極限で　$\hat\theta_n$ が確率収束するとき　$\hat\theta_n$ は一致性を持つという.
+- 推定量の漸近分散が $1/I_1(\theta)$ であるとき, すなわち
+$$
+\sqrt{n}(\hat{\theta}_n - \theta) \to_d \mathcal{N}(0, 1/I_1(\theta))
+$$
+という分布収束が成り立つ時 $\hat{\theta}_n$ は漸近有効という.
+
+<!-- #region -->
+### Theorem(クラメールの一致性):
+
+$X^n \underset{\textrm{i.i.d}}{\sim} q$ なるサンプル $X^n$, 真の分布 $q$, 確率モデル　$f(x|\theta), \theta\in\Theta$ が与えられ, 次の条件を満たすとする:
+
+- C1: 確率モデルのサポートはパラメータに依存しない.
+- C2: 
+  下記のように微分積分順序が可能:
+  $$
+  \frac{d}{d\theta}\int f(x|\theta) dx = \int \frac{d}{d\theta} f(x|\theta) dx (= 0),
+  $$
+  $$
+  \frac{d^2}{d\theta^2}\int f(x|\theta) dx = \int \frac{d^2}{d\theta^2} f(x|\theta) dx (= 0).
+  $$
+- C４: パラメータが統計モデルを識別する, すなわち
+  $$
+  \theta_i \neq \tilde{\theta} \Rightarrow f(\bullet|\theta) \neq f(\bullet|\tilde{\theta}).
+  $$
+- C5: $q(x)=f(x|\theta_0)$ なる $\theta_0$ (真のパラメータ)があって, $\theta_0$ は $\Theta$ の内点
+
+このとき尤度 $L=L(\theta) = \prod_{i=1}^n f(X_i |\theta)$ についての方程式
+
+
+$$
+\frac{d}{d\theta} L = 0
+$$
+
+
+は $\theta_0$ に確率収束する解を含む．
+<!-- #endregion -->
+
+### Theorem(最尤推定量の漸近有効性)
+
+クラメールの一致性の条件 C1 から C5 に加えて次の条件を要請する
+
+- C6 次の条件を満たす $c >0$ と $M(x)$ が存在する:
+$$
+\left|\frac{d^3}{d\theta^3} \log f(x|\theta) \right| \leq M(x) \ \ \textrm{for all} \ \theta \in (\theta_0 - c, \theta_0 +c),
+$$
+$$
+E_{\theta_0}[M(X_1)]<+\infty
+$$
+
+このとき, 
+
+$$
+\sqrt{n}(\hat{\theta}_n - \theta) \to_d \mathcal{N}(0, 1/I_1(\theta))
+$$
+
+となる.
 
 
 # TODO
