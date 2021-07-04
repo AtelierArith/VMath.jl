@@ -5,7 +5,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.11.3
+      jupytext_version: 1.11.2
   kernelspec:
     display_name: Julia 1.6.1
     language: julia
@@ -13,6 +13,8 @@ jupyter:
 ---
 
 # 特異モデルの例
+
+特異モデルの例として識別不能な場合の例を述べる
 
 
 $$
@@ -71,9 +73,9 @@ $$
 
 $$
 \begin{aligned}
-[a_1, a_2]\begin{bmatrix}\xi_1\\ \xi_2\end{bmatrix}[\xi_1, \xi_2]\begin{bmatrix}a_1\\a_2\end{bmatrix} =0 \\
-\Rightarrow [a_1, a_2]\begin{bmatrix} \xi_1^2 & \xi_1\xi_2 \\ \xi_2\xi_1 & \xi_2^2\end{bmatrix}\begin{bmatrix}a_1\\a_2\end{bmatrix} =0 \\
-\Rightarrow [a_1, a_2]I(\theta_0)\begin{bmatrix}a_1\\a_2\end{bmatrix} = 0
+\begin{bmatrix}a_1 & a_2\end{bmatrix} \begin{bmatrix}\xi_1\\ \xi_2\end{bmatrix}[\xi_1, \xi_2]\begin{bmatrix}a_1\\a_2\end{bmatrix} =0 \\
+\Rightarrow \begin{bmatrix}a_1 & a_2\end{bmatrix}\begin{bmatrix} \xi_1^2 & \xi_1\xi_2 \\ \xi_2\xi_1 & \xi_2^2\end{bmatrix}\begin{bmatrix}a_1\\a_2\end{bmatrix} =0 \\
+\Rightarrow \begin{bmatrix}a_1 & a_2\end{bmatrix}I(\theta_0)\begin{bmatrix}a_1\\a_2\end{bmatrix} = 0
 \end{aligned}
 $$
 
