@@ -15,6 +15,7 @@ jupyter:
 # 特異モデルの統計学
 
 これはテキスト$\underset{\textrm{def}}{=}$ [特異モデルの統計学 (統計科学のフロンティア 岩波書店)](https://www.iwanami.co.jp/book/b260373.html) の Chapter 1 section 1 の部分について触れた日本語で記述されたお勉強ノートである.
+特異というのを知る前に正則なものを知る必要がある.
 
 
 # モチベーション
@@ -487,7 +488,7 @@ $$
 が $\hat{\mu}$ であるときは $V(\bar{X}) = \frac{1}{n}$ である. つまり $\bar{X}$ は Cramér–Raoの下限を実現できている良い．不偏推定量になっている.
 
 
-# 特定の条件下での最尤推定量の一致性
+# 正則条件下での最尤推定量の一致性や漸近有効性について
 
 - パラメータの次元が 1 の場合についてのべる
 - サンプルサイズが $n$ のサンプル $X^n$ から得られたパラメータ $\theta$ についての推定量　$\hat\theta_n$  が得られたとする. この時　$n\to\infty$ の極限で　$\hat\theta_n$ が確率収束するとき　$\hat\theta_n$ は一致性を持つという.
@@ -540,7 +541,7 @@ $$
 E_{\theta_0}[M(X_1)]<+\infty
 $$
 
-このとき, 
+このとき, $\theta$ の最尤推定量 $\hat\theta$ について
 
 $$
 \sqrt{n}(\hat{\theta}_n - \theta) \to_d \mathcal{N}(0, 1/I_1(\theta))
@@ -549,22 +550,77 @@ $$
 となる.
 
 
-# TODO
+#### 証明の方針
 
-- 正則条件
-- パラメータが最適なパラメータへの確率収束させること
-- 漸近
-- 対数尤度比関数
-- AIC
-- chisq の分布収束性について
+対数尤度比関数を次の記号で書く
 
-## 他のノートブック
+$$
+l(\theta)=\sum_{i=1}^n \log f(X_i | \theta)
+$$
+$$
+l' (\theta) = \frac{d}{d\theta}l = \sum_{i=1}^n \frac{d}{d\theta}\log f(X_i, \theta) = \sum_{i=1}^n S_1(\theta, X_i)
+$$
 
-識別不能なモデルの微分
+このとき最尤推定量 $l'(\hat\theta)$ となる.
+
+いま $l'$ を $\theta_0$ の周りでTaylor展開をする
+
+$$
+0 = l'(\hat\theta) = l'(\theta_0) + (\hat\theta - \theta_0) l''(\theta_0) + \frac{1}{2}(\hat\theta-\theta_0)^2 l'''(\theta^*)
+$$
+
+$\theta^*$ は適当な値. これを次のように整理していく.
+
+$$
+\begin{aligned}
+l'(\theta_0) &= -(\hat\theta - \theta_0)( l''(\theta_0) + \frac{1}{2}(\hat\theta-\theta_0) l'''(\theta^*)) \\
+&\Leftrightarrow \\
+\sqrt{n}(\hat\theta - \theta_0) &= \frac{\sqrt{n}l'(\theta_0)}{-l''(\theta_0) - \frac{1}{2}(\hat\theta- \theta_0)l'''(\theta^*)}
+\sqrt{n}(\hat\theta - \theta_0) = \frac{\frac{1}{\sqrt{n}}l'(\theta_0)}{-\frac{1}{n}l''(\theta_0) - \frac{1}{2n}(\hat\theta- \theta_0)l'''(\theta^*)}
+\end{aligned}
+ $$
+ 
+ ひとまず $\sqrt{n}(\hat\theta-\theta_0)$ の形を作ることができた. $n\to\infty$ の極限による分子と分母の振る舞いを見ていく
+ 
+分子側の $\frac{1}{\sqrt{n}}l'(\theta_0)$ について:
+
+$E[S_1(\theta_0, X_i)] = 0, V[S_1(\theta_0, X_i)] = E[S_1(\theta_0, X_i)^2] = I_1$ であることを思い出すと CLT から
+
+$\frac{1}{\sqrt{n}}l'(\theta_0)\to_d \mathcal{N}(0, I_1)$
+
+分母側について
+
+$$
+\begin{aligned}
+-\frac{1}{n}l''(\theta_0) &= -\frac{1}{n}\sum_i \frac{d^2}{d\theta^2} \log f(X_i, \theta_0) \\
+-E\left[\frac{d^2}{d\theta^2} \log f(X_i, \theta_0)\right] &= I_1(\theta_0)
+\end{aligned}
+$$
+
+であることから大数の法則によって $-\frac{1}{n}l''(\theta_0)$ は $I_1(\theta_0)$ に確率収束する.
+
+最後に
+
+$\frac{1}{2n}(\hat\theta-\theta_0)^2 l'''(\theta^*)$ はC6の条件によって三階微分の項は確率有界であることと最尤推定量の一致性を使うことでゼロになる.
+
+以上の結果とスラツキーの定理によって
+
+$\sqrt{n}(\hat\theta - \theta_0) \to_d I_1(\theta_0)^{-1}\mathcal{N}(0, I_1(\theta_0))=\mathcal{N}(0, I_1(\theta_0)^{-1})$
 
 
+以上のようにいくつかの正則条件 C1からC６を仮定することで最尤推定量の漸近有効性について述べることができた. 
 
-# Reference
+
+# その他
+
+- 正則性条件 C1からC6を満たす確率モデルにおいて, 対数尤度比関数の漸近収束の話は　 [現代数理統計学の基礎 (共立出版)](https://www.kyoritsu-pub.co.jp/bookdetail/9784320111660)　 ７章に記載されている.　実現可能性などの条件によって特殊化すると[ベイズ統計の理論と方法](https://www.coronasha.co.jp/np/isbn/9784339024623/)　の系として得られる.
+- AIC についての定理は[ベイズ統計の理論と方法](https://www.coronasha.co.jp/np/isbn/9784339024623/)を参照すること. 
+
+
+次話すこと． 特異と呼ばれる例
+
+
+# Appendix
 
 特異モデルについての英語のレクチャーノートは例えば下記のようなものがある. (適当にググっただけなので内容については保証しない)kkk
 
