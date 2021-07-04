@@ -5,14 +5,14 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.11.3
+      jupytext_version: 1.11.2
   kernelspec:
     display_name: Julia 1.6.1
     language: julia
     name: julia-1.6
 ---
 
-# 回帰問題
+# (単調)回帰問題のお話
 
 ```julia
 using Distributions
