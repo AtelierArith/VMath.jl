@@ -5,7 +5,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.11.3
+      jupytext_version: 1.11.2
   kernelspec:
     display_name: Julia 1.6.1
     language: julia
@@ -613,8 +613,13 @@ $\sqrt{n}(\hat\theta - \theta_0) \to_d I_1(\theta_0)^{-1}\mathcal{N}(0, I_1(\the
 
 # その他
 
-- 正則性条件 C1からC6を満たす確率モデルにおいて, 対数尤度比関数の漸近収束の話は　 [現代数理統計学の基礎 (共立出版)](https://www.kyoritsu-pub.co.jp/bookdetail/9784320111660)　 ７章に記載されている.　実現可能性などの条件によって特殊化すると[ベイズ統計の理論と方法](https://www.coronasha.co.jp/np/isbn/9784339024623/)　の系として得られる.
+- 正則性条件 C1からC6を満たす確率モデルにおいて, 対数尤度比関数の漸近収束の話は　 [現代数理統計学の基礎 (共立出版)](https://www.kyoritsu-pub.co.jp/bookdetail/9784320111660)　 ７章に記載されている.　
+- 実現可能性などの条件によって特殊化すると[ベイズ統計の理論と方法](https://www.coronasha.co.jp/np/isbn/9784339024623/)　の系として得られる.
+  - 例えば p.60 補題 11, p.82 注意 32 を参照せよ
+- 事後確率最大化推定量と最尤推定量の漸近挙動についても詳しい
+　- p.74 補題 19 を参照せよ
 - AIC についての定理は[ベイズ統計の理論と方法](https://www.coronasha.co.jp/np/isbn/9784339024623/)を参照すること. 
+  - 例えば p.80
 
 
 次話すこと． 特異と呼ばれる例
