@@ -575,8 +575,7 @@ $$
 \begin{aligned}
 l'(\theta_0) &= -(\hat\theta - \theta_0)( l''(\theta_0) + \frac{1}{2}(\hat\theta-\theta_0) l'''(\theta^*)) \\
 &\Leftrightarrow \\
-\sqrt{n}(\hat\theta - \theta_0) &= \frac{\sqrt{n}l'(\theta_0)}{-l''(\theta_0) - \frac{1}{2}(\hat\theta- \theta_0)l'''(\theta^*)}
-\sqrt{n}(\hat\theta - \theta_0) = \frac{\frac{1}{\sqrt{n}}l'(\theta_0)}{-\frac{1}{n}l''(\theta_0) - \frac{1}{2n}(\hat\theta- \theta_0)l'''(\theta^*)}
+\sqrt{n}(\hat\theta - \theta_0) &= \frac{\sqrt{n}l'(\theta_0)}{-l''(\theta_0) - \frac{1}{2}(\hat\theta- \theta_0)l'''(\theta^*)} = \frac{\frac{1}{\sqrt{n}}l'(\theta_0)}{-\frac{1}{n}l''(\theta_0) - \frac{1}{2n}(\hat\theta- \theta_0)l'''(\theta^*)}
 \end{aligned}
  $$
  

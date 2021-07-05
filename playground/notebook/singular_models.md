@@ -20,7 +20,7 @@ jupyter:
 $$
 \begin{aligned}
 \phi_\mu(x) &= \frac{1}{(2\pi)^{1/2}} \exp\left(-\frac{1}{2}(x-\mu)^2\right), \\
-\phi(x) &= \phi_{\mu=1}(x)
+\phi(x) &= \phi_{\mu=0}(x)
 \end{aligned}
 $$
 
